@@ -49,55 +49,99 @@ class _MyHomePageState extends State<MyHomePage> {
       appBar: AppBar(
         title: const Text('Firestore Search Example'),
       ),
-      body: Row(
+      body: Column(
         children: [
-          Expanded(
-            child: TextField(
-              controller: searchController,
-              onChanged: (value) {
-                // Update searchText when the user types
-                searchText = value;
-              },
-              decoration: const InputDecoration(
-                labelText: 'Search',
-                border: OutlineInputBorder(),
-              ),
+          Padding(
+            padding: const EdgeInsets.all(30.0),
+            child: Row(
+              children: [
+                Expanded(
+                  child: TextField(
+                    controller: searchController,
+                    onChanged: (value) {
+                      // Update searchText when the user types
+                      if (value.isEmpty) {
+                         Expanded(
+                            child: Padding(
+                              padding: const EdgeInsets.only(left: 30.0, right: 30.0),
+                              child: StreamBuilder(
+                                stream: searchResults,
+                                builder: (context, snapshot) {
+                              
+                                  var documents = snapshot.data?.docs;
+                              
+                                  return ListView.builder(
+                                    itemCount: documents?.length,
+                                    itemBuilder: (context, index) {
+                                      var document = documents?[index];
+                                      return ListTile(
+                                        title: Text(
+                                          document?[''],
+                                          style: TextStyle(fontSize: 30.0),
+                                          ),
+                                        // subtitle: Text(document?['arti']),
+                                      );
+                                    },
+                                  );
+                                },
+                              ),
+                            ),
+                          );
+                      }
+                      searchText = value;
+                    },
+                    decoration: const InputDecoration(
+                      labelText: 'Cari Kata',
+                      border: OutlineInputBorder(),
+                    ),
+                  ),
+                ),
+            
+                IconButton(
+                  onPressed: (){
+                    performSearch();
+                  }, 
+                  icon: const Icon(Icons.search)),
+              ],
             ),
           ),
-          IconButton(
-            onPressed: (){
-              performSearch();
-            }, 
-            icon: const Icon(Icons.search)),
+          
 
           Expanded(
-            child: StreamBuilder(
-              stream: searchResults,
-              builder: (context, snapshot) {
-            
-                if (snapshot.hasError) {
-                  return Text("Error: ${snapshot.error}");
-                }
-            
-                if (!snapshot.hasData) {
-                  return const Center(
-                    child: CircularProgressIndicator(),
-                  );
-                }
-            
-                var documents = snapshot.data?.docs;
-            
-                return ListView.builder(
-                  itemCount: documents?.length,
-                  itemBuilder: (context, index) {
-                    var document = documents?[index];
-                    return ListTile(
-                      title: Text(document?['kata']),
-                      subtitle: Text(document?['arti']),
+            child: Padding(
+              padding: const EdgeInsets.only(left: 30.0, right: 30.0),
+              child: StreamBuilder(
+                stream: searchResults,
+                builder: (context, snapshot) {
+              
+                  if (snapshot.hasError) {
+                    return Text("Error: ${snapshot.error}");
+                  }
+              
+                  if (!snapshot.hasData) {
+                    return const SizedBox(
+                      child: Text("Silahkan isikan kata"),
                     );
-                  },
-                );
-              },
+                  }
+
+              
+                  var documents = snapshot.data?.docs;
+              
+                  return ListView.builder(
+                    itemCount: documents?.length,
+                    itemBuilder: (context, index) {
+                      var document = documents?[index];
+                      return ListTile(
+                        title: Text(
+                          document?['arti'],
+                          style: TextStyle(fontSize: 30.0),
+                          ),
+                        // subtitle: Text(document?['arti']),
+                      );
+                    },
+                  );
+                },
+              ),
             ),
           ),
         ],
@@ -107,14 +151,35 @@ class _MyHomePageState extends State<MyHomePage> {
 
   void performSearch() async {
   // Query Firestore with the searchText
-  var query = FirebaseFirestore.instance
-      .collection('kamus')
-      .where('kata', isGreaterThanOrEqualTo: searchText);
+  if (searchText.isNotEmpty) {
+    var query = FirebaseFirestore.instance
+        .collection('kamus')
+        .where('kata', isEqualTo: searchText);
 
-  // Update the stream with the new query
-  setState(() {
-    searchResults = query.snapshots();
-  });
+    // Update the stream with the new query
+    setState(() {
+      searchResults = query.snapshots();
+    });
+  } else {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Peringatan'),
+          content: Text('Harap masukkan kata kunci untuk melakukan pencarian.'),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: Text('OK'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
 }
 
 }
