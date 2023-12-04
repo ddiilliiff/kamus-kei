@@ -60,34 +60,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     controller: searchController,
                     onChanged: (value) {
                       // Update searchText when the user types
-                      if (value.isEmpty) {
-                         Expanded(
-                            child: Padding(
-                              padding: const EdgeInsets.only(left: 30.0, right: 30.0),
-                              child: StreamBuilder(
-                                stream: searchResults,
-                                builder: (context, snapshot) {
-                              
-                                  var documents = snapshot.data?.docs;
-                              
-                                  return ListView.builder(
-                                    itemCount: documents?.length,
-                                    itemBuilder: (context, index) {
-                                      var document = documents?[index];
-                                      return ListTile(
-                                        title: Text(
-                                          document?[''],
-                                          style: TextStyle(fontSize: 30.0),
-                                          ),
-                                        // subtitle: Text(document?['arti']),
-                                      );
-                                    },
-                                  );
-                                },
-                              ),
-                            ),
-                          );
-                      }
+                      
                       searchText = value;
                     },
                     decoration: const InputDecoration(
