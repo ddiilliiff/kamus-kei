@@ -1,7 +1,8 @@
-import 'package:cloud_firestore/cloud_firestore.dart' show FirebaseFirestore, QuerySnapshot;
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:kamus/firebase_options.dart';
+import 'package:kamus/page/indo_key.dart';
+import 'package:kamus/page/kei_indo.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -11,9 +12,14 @@ void main() async {
   runApp(const MyApp());
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   const MyApp({super.key});
 
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
@@ -24,135 +30,70 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: const MyHomePage(),
+      initialRoute: '/',
+      routes: {
+        '/' : (context) => const MyHomePage(),
+        '/indo' : (context) => const IndoKey(),
+        '/kei'  : (context) => const KeiIndo(),
+      },
     );
   }
 }
 
-
-class MyHomePage extends StatefulWidget {
+class MyHomePage extends StatelessWidget {
   const MyHomePage({super.key});
-  
-  @override
-  State<MyHomePage> createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> {
-  Stream<QuerySnapshot<Map<String, dynamic>>>? searchResults;
-  
-  TextEditingController searchController = TextEditingController();
-  String searchText = '';
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Firestore Search Example'),
-      ),
-      body: Column(
+      body: Stack(
         children: [
-          Padding(
-            padding: const EdgeInsets.all(30.0),
-            child: Row(
+          Container(
+            constraints: const BoxConstraints.expand(),
+            child: const Image(
+              image: AssetImage('assets/ocep.jpg'),
+              fit: BoxFit.cover,
+              ),
+          ),
+          SizedBox(
+            width: 500.0,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Expanded(
-                  child: TextField(
-                    controller: searchController,
-                    onChanged: (value) {
-                      // Update searchText when the user types
-                      
-                      searchText = value;
-                    },
-                    decoration: const InputDecoration(
-                      labelText: 'Cari Kata',
-                      border: OutlineInputBorder(),
-                    ),
-                  ),
-                ),
-            
-                IconButton(
+                ElevatedButton(
                   onPressed: (){
-                    performSearch();
+                    Navigator.pushNamed(context, '/indo');
                   }, 
-                  icon: const Icon(Icons.search)),
+                  style: ElevatedButton.styleFrom(
+                    foregroundColor: Colors.blue
+                    ),
+                  child: const Text(
+                    "INDONESIA - KEI",
+                    style: TextStyle(
+                      fontSize: 30.0
+                    ),
+                    )
+                  ),
+                const SizedBox(height: 30.0,),
+                ElevatedButton(
+                  onPressed: (){
+                    Navigator.pushNamed(context, '/kei');
+                  }, 
+                  style: ElevatedButton.styleFrom(
+                    foregroundColor: Colors.blue
+                    ),
+                  child: const Text(
+                    "KEI - INDONESIA",
+                    style: TextStyle(
+                      fontSize: 30.0
+                    ),
+                    )
+                  )
               ],
             ),
-          ),
-          
-
-          Expanded(
-            child: Padding(
-              padding: const EdgeInsets.only(left: 30.0, right: 30.0),
-              child: StreamBuilder(
-                stream: searchResults,
-                builder: (context, snapshot) {
-              
-                  if (snapshot.hasError) {
-                    return Text("Error: ${snapshot.error}");
-                  }
-              
-                  if (!snapshot.hasData) {
-                    return const SizedBox(
-                      child: Text("Silahkan isikan kata"),
-                    );
-                  }
-
-              
-                  var documents = snapshot.data?.docs;
-              
-                  return ListView.builder(
-                    itemCount: documents?.length,
-                    itemBuilder: (context, index) {
-                      var document = documents?[index];
-                      return ListTile(
-                        title: Text(
-                          document?['arti'],
-                          style: TextStyle(fontSize: 30.0),
-                          ),
-                        // subtitle: Text(document?['arti']),
-                      );
-                    },
-                  );
-                },
-              ),
-            ),
-          ),
+          )
         ],
       ),
     );
   }
-
-  void performSearch() async {
-  // Query Firestore with the searchText
-  if (searchText.isNotEmpty) {
-    var query = FirebaseFirestore.instance
-        .collection('kamus')
-        .where('kata', isEqualTo: searchText);
-
-    // Update the stream with the new query
-    setState(() {
-      searchResults = query.snapshots();
-    });
-  } else {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text('Peringatan'),
-          content: Text('Harap masukkan kata kunci untuk melakukan pencarian.'),
-          actions: [
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-              child: Text('OK'),
-            ),
-          ],
-        );
-      },
-    );
-  }
-
-}
-
 }
