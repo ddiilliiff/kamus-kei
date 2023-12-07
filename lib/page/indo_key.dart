@@ -99,7 +99,7 @@ class _IndoKeyState extends State<IndoKey> {
   if (searchText.isNotEmpty) {
     var query = FirebaseFirestore.instance
         .collection('kamus')
-        .where('kata', isEqualTo: searchText);
+        .where('kata', isEqualTo: searchText.toLowerCase());
 
     // Update the stream with the new query
     setState(() {

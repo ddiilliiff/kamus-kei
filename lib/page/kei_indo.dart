@@ -98,7 +98,7 @@ class _KeiIndoState extends State<KeiIndo> {
   if (searchText.isNotEmpty) {
     var query = FirebaseFirestore.instance
         .collection('kamus')
-        .where('arti', isEqualTo: searchText);
+        .where('arti', isEqualTo: searchText.toLowerCase());
 
     // Update the stream with the new query
     setState(() {
