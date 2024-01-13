@@ -75,8 +75,8 @@ class _KeiIndoState extends State<KeiIndo> {
                       return ListTile(
                         title: Text(
                           document?['kata'],
-                          style: const TextStyle(fontSize: 30.0),
-                          textAlign: TextAlign.center,
+                          style: const TextStyle(fontSize: 20.0),
+                          textAlign: TextAlign.justify,
                           overflow: TextOverflow.ellipsis,
                           maxLines: 2,
                           ),
@@ -100,10 +100,20 @@ class _KeiIndoState extends State<KeiIndo> {
         .collection('kamus')
         .where('arti', isEqualTo: searchText.toLowerCase());
 
+    var querySnapshot = await query.get();
+
     // Update the stream with the new query
     setState(() {
-      searchResults = query.snapshots();
+      searchResults = Stream.value(querySnapshot);
     });
+
+    if (querySnapshot.docs.isEmpty) {
+      // ignore: use_build_context_synchronously
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Tidak Ada Kata'))
+      );
+    }
+
   } else {
     showDialog(
       context: context,

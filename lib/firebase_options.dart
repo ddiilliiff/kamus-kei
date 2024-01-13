@@ -53,10 +53,10 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyCicY7sihpPSVFI6hxcqZrfPzLt1b4_Oe0',
-    appId: '1:1096099647476:android:1f9cd938384c6e32fef3a1',
-    messagingSenderId: '1096099647476',
-    projectId: 'kamus-20cb4',
-    storageBucket: 'kamus-20cb4.appspot.com',
+    apiKey: 'AIzaSyAk061EgAtWSof0nD5kIxO8XkOEeVc5_4Q',
+    appId: '1:663725756970:android:61b69f5f8f88171c0e6953',
+    messagingSenderId: '663725756970',
+    projectId: 'kamus-f60d1',
+    storageBucket: 'kamus-f60d1.appspot.com',
   );
 }

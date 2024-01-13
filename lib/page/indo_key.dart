@@ -1,5 +1,7 @@
 import "package:cloud_firestore/cloud_firestore.dart" show FirebaseFirestore, QuerySnapshot;
 import 'package:flutter/material.dart';
+import 'package:flutter_tts/flutter_tts.dart';
+
 
 class IndoKey extends StatefulWidget {
   const IndoKey({super.key});
@@ -10,6 +12,7 @@ class IndoKey extends StatefulWidget {
 
 class _IndoKeyState extends State<IndoKey> {
 
+  FlutterTts flutterTts = FlutterTts();
   Stream<QuerySnapshot<Map<String, dynamic>>>? searchResults;
   TextEditingController searchController = TextEditingController();
   String searchText = '';
@@ -76,12 +79,15 @@ class _IndoKeyState extends State<IndoKey> {
                       return ListTile(
                         title: Text(
                           document?['arti'],
-                          style: const TextStyle(fontSize: 30.0),
-                          textAlign: TextAlign.center,
+                          style: const TextStyle(fontSize: 20.0),
+                          textAlign: TextAlign.justify,
                           overflow: TextOverflow.ellipsis,
                           maxLines: 2,
                           ),
-                        // subtitle: Text(document?['arti']),
+                        trailing: IconButton(
+                          icon: const Icon(Icons.volume_up),
+                          onPressed: () => _speak(document?['arti']),
+                        ),
                       );
                     },
                   );
@@ -101,10 +107,19 @@ class _IndoKeyState extends State<IndoKey> {
         .collection('kamus')
         .where('kata', isEqualTo: searchText.toLowerCase());
 
+    var querySnapshot = await query.get();
+
     // Update the stream with the new query
     setState(() {
-      searchResults = query.snapshots();
+      searchResults = Stream.value(querySnapshot);
     });
+
+    if (querySnapshot.docs.isEmpty) {
+      // ignore: use_build_context_synchronously
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Tidak Ada Kata'))
+      );
+    }
   } else {
     showDialog(
       context: context,
@@ -124,6 +139,10 @@ class _IndoKeyState extends State<IndoKey> {
       },
     );
   }
-
 }
+  Future<void> _speak(String text) async {
+    await flutterTts.setLanguage('id-ID');
+    await flutterTts.setPitch(1.0);
+    await flutterTts.speak(text);
+  }
 }
