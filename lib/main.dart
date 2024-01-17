@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:kamus/firebase_options.dart';
 import 'package:kamus/page/indo_key.dart';
 import 'package:kamus/page/kei_indo.dart';
+// import 'package:flutter/foundation.dart' show kIsWeb;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

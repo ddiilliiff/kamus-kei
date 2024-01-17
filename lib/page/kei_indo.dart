@@ -97,7 +97,7 @@ class _KeiIndoState extends State<KeiIndo> {
   // Query Firestore with the searchText
   if (searchText.isNotEmpty) {
     var query = FirebaseFirestore.instance
-        .collection('kamus')
+        .collection('kamus2')
         .where('arti', isEqualTo: searchText.toLowerCase());
 
     var querySnapshot = await query.get();

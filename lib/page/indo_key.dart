@@ -104,7 +104,7 @@ class _IndoKeyState extends State<IndoKey> {
   // Query Firestore with the searchText
   if (searchText.isNotEmpty) {
     var query = FirebaseFirestore.instance
-        .collection('kamus')
+        .collection('kamus2')
         .where('kata', isEqualTo: searchText.toLowerCase());
 
     var querySnapshot = await query.get();

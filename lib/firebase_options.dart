@@ -17,10 +17,7 @@ import 'package:flutter/foundation.dart'
 class DefaultFirebaseOptions {
   static FirebaseOptions get currentPlatform {
     if (kIsWeb) {
-      throw UnsupportedError(
-        'DefaultFirebaseOptions have not been configured for web - '
-        'you can reconfigure this by running the FlutterFire CLI again.',
-      );
+      return web;
     }
     switch (defaultTargetPlatform) {
       case TargetPlatform.android:
@@ -52,11 +49,22 @@ class DefaultFirebaseOptions {
     }
   }
 
+  static const FirebaseOptions web = FirebaseOptions(
+    apiKey: 'AIzaSyAk01xmzACeQFjrQOJJRZbw8hM3alSG0lY',
+    appId: '1:14783158840:web:78ff40eebf96594ec7a4cd',
+    messagingSenderId: '14783158840',
+    projectId: 'kamus2-3a07c',
+    authDomain: 'kamus2-3a07c.firebaseapp.com',
+    databaseURL: 'https://kamus2-3a07c-default-rtdb.asia-southeast1.firebasedatabase.app',
+    storageBucket: 'kamus2-3a07c.appspot.com',
+  );
+
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyAk061EgAtWSof0nD5kIxO8XkOEeVc5_4Q',
-    appId: '1:663725756970:android:61b69f5f8f88171c0e6953',
-    messagingSenderId: '663725756970',
-    projectId: 'kamus-f60d1',
-    storageBucket: 'kamus-f60d1.appspot.com',
+    apiKey: 'AIzaSyDn3im9_d7EgCwT1iPlDZXQEfXTYQYSsus',
+    appId: '1:14783158840:android:ed57e97d2c75a504c7a4cd',
+    messagingSenderId: '14783158840',
+    projectId: 'kamus2-3a07c',
+    databaseURL: 'https://kamus2-3a07c-default-rtdb.asia-southeast1.firebasedatabase.app',
+    storageBucket: 'kamus2-3a07c.appspot.com',
   );
 }

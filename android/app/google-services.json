@@ -1,13 +1,14 @@
 {
   "project_info": {
-    "project_number": "663725756970",
-    "project_id": "kamus-f60d1",
-    "storage_bucket": "kamus-f60d1.appspot.com"
+    "project_number": "14783158840",
+    "firebase_url": "https://kamus2-3a07c-default-rtdb.asia-southeast1.firebasedatabase.app",
+    "project_id": "kamus2-3a07c",
+    "storage_bucket": "kamus2-3a07c.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:663725756970:android:61b69f5f8f88171c0e6953",
+        "mobilesdk_app_id": "1:14783158840:android:ed57e97d2c75a504c7a4cd",
         "android_client_info": {
           "package_name": "com.example.kamus"
         }
@@ -15,7 +16,7 @@
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyAk061EgAtWSof0nD5kIxO8XkOEeVc5_4Q"
+          "current_key": "AIzaSyDn3im9_d7EgCwT1iPlDZXQEfXTYQYSsus"
         }
       ],
       "services": {
